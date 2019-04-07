@@ -1,0 +1,8 @@
+name: IdeaProjects
+main: me.galaxysmediaxz.joinmessage.main
+version: 1.0
+author: GLSM
+commands:
+  jtagbrel:
+    usage: /<command>
+    description: Reload JoinMesssage
