@@ -1,8 +1,0 @@
-    public void onPlayerJoin(PlayerJoinEvent event) { 
-        IChatBaseComponent titleString = IChatBaseComponent.ChatSerializer.a((String)("{\"text\": \"" + this.getConfig().getString("firstLine") + "\"}")); 
-        PacketPlayOutTitle title = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleString, 20, 300, 20); 
-        IChatBaseComponent subTitleString = IChatBaseComponent.ChatSerializer.a((String)("{\"text\": \"" + this.getConfig().getString("secondLine") + "\"}")); 
-        PacketPlayOutTitle subTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subTitleString, 20, 300, 20); 
-        ((CraftPlayer)event.getPlayer()).getHandle().playerConnection.sendPacket((Packet)title); 
-        ((CraftPlayer)event.getPlayer()).getHandle().playerConnection.sendPacket((Packet)subTitle); 
-    } 
