@@ -3,7 +3,7 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.4Snapshot                                                #
+# # Version: 0.5Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
@@ -16,3 +16,5 @@ Messages:
         - '&bWelcome to Server &9{server}'
         - ''
     No-Permission: '&cSorry, {player} but you not have permission to use this command'
+    Title: '&6&lWelcome! &9&l{player}'
+    Subtitle: '&bWelcome to server &a{server}'
