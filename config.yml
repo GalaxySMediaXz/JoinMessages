@@ -3,11 +3,12 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.2Snapshot                                                #
+# # Version: 0.3Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
-Welcome-Message: Hi {player}, Welcome to unknow server! # You can add color code! Using ANSI Encoding!
-Try-to-reload-to-player: Trying to reload JoinMessages...
-Try-to-reload-to-console: {player} Trying to reload JoinMessages
-Reload-Complete: Reload Configuration Complete!
+Messages:
+    Prefix: '&8&l[&b&lJoinMessages&8&l] '
+    Reload-Complete: '&a&lReload Complete!'
+    Welcome-Message: '&b&lHi &6&l{player}%newline%&a&lWelcome to Server &9&l{server}!'
+    No-Permission: '&cSorry, {player} but you not have permission to use this command'
