@@ -1,6 +1,8 @@
 package me.galaxysmediaxz.joinmessages;
 
+import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +33,13 @@ public class main extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        p.sendMessage(getConfig().getString("Messages.Welcome-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()).replace("%newline%", "\n"));
+        for (int i = 0; i < 100; i++){
+            p.sendMessage(" ");
+        }
+        List<String> Lines = getConfig().getStringList("Messages.MOTD");
+        for (String s : Lines){
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', s).replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+        }
     }
 
     @Override
