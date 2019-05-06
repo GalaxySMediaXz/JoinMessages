@@ -15,7 +15,6 @@ jm.admin
 Command:
 /jm reload - Reload a config
 /jm - Show a list commands
-/jm about - Show a list of Developer
 
 A future features:
 Per Permission Join Messeages
