@@ -1,8 +1,7 @@
 name: JoinMessages
-main: me.galaxysmediaxz.joinmessage.main
-version: 0.2
-author: GLSM
+main: me.galaxysmediaxz.joinmessages.main
+version: 0.3
+author: [GalaxySMediaXz]
 commands:
-  jc:
-    usage: /<command> <section>
-    description: About the plugins
+  jm:
+    description: Main Command
