@@ -1,10 +1,14 @@
 package me.galaxysmediaxz.joinmessages;
 
 import java.util.List;
+import net.minecraft.server.v1_8_R1.ChatSerializer;
+import net.minecraft.server.v1_8_R1.EnumTitleAction;
+import net.minecraft.server.v1_8_R1.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,7 +44,15 @@ public class main extends JavaPlugin implements Listener {
         for (String s : Lines){
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', s).replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
         }
-    }
+        
+        PacketPlayOutTitle title = new PacketPlayOutTitle(EnumTitleAction.TITLE,
+                ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Messages.Title").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"),40,20,20);
+        PacketPlayOutTitle subtitle = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
+                ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Messages.Subtitle").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"),40,20,20);
+        
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(subtitle);
+   }
 
     @Override
     public void onDisable() {
