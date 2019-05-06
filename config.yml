@@ -3,12 +3,16 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.3Snapshot                                                #
+# # Version: 0.4Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
 Messages:
     Prefix: '&8&l[&b&lJoinMessages&8&l] '
     Reload-Complete: '&a&lReload Complete!'
-    Welcome-Message: '&b&lHi &6&l{player}%newline%&a&lWelcome to Server &9&l{server}!'
+    MOTD:
+        - ''
+        - '&aHi! &9{player}'
+        - '&bWelcome to Server &9{server}'
+        - ''
     No-Permission: '&cSorry, {player} but you not have permission to use this command'
