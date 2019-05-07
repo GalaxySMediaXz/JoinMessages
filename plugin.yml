@@ -1,6 +1,6 @@
 name: JoinMessages
 main: me.galaxysmediaxz.joinmessages.main
-version: 0.7
+version: 0.8
 author: [GalaxySMediaXz]
 commands:
   jm:
