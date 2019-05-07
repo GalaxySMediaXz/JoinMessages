@@ -3,7 +3,7 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.5Snapshot                                                #
+# # Version: 0.6Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
@@ -16,5 +16,9 @@ Messages:
         - '&bWelcome to Server &9{server}'
         - ''
     No-Permission: '&cSorry, {player} but you not have permission to use this command'
-    Title: '&6&lWelcome! &9&l{player}'
-    Subtitle: '&bWelcome to server &a{server}'
+    Player-Only: '&cOnly Player Can use this command!'
+    Reloading: '&e&lReloading Plugins....'
+Title:
+    Title: '&6&lWelcome!'
+    Subtitle: '&9Hi {player}!'
+    Actionbar: '&aHave fun!'
