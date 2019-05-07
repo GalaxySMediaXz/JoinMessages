@@ -3,7 +3,7 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.6Snapshot                                                #
+# # Version: 0.7Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
@@ -18,6 +18,8 @@ Messages:
     No-Permission: '&cSorry, {player} but you not have permission to use this command'
     Player-Only: '&cOnly Player Can use this command!'
     Reloading: '&e&lReloading Plugins....'
+    Join-Message: '&e&l{player} &ahas joined the server!'
+    Quit-Message: '&e&l{player} &chas leaved the server :('
 Title:
     Title: '&6&lWelcome!'
     Subtitle: '&9Hi {player}!'
