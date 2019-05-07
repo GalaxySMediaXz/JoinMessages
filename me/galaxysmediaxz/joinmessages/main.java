@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class main extends JavaPlugin implements Listener {
@@ -57,7 +58,17 @@ public class main extends JavaPlugin implements Listener {
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(subtitle);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(actionbar);
+        
+        e.setJoinMessage(getConfig().getString("Messages.Join-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
    }
+    
+    @EventHandler
+    public void OnPlayerQuit(PlayerQuitEvent e){
+        
+        Player p = e.getPlayer();
+        
+        e.setQuitMessage(getConfig().getString("Messages.Quit-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+    }
 
     @Override
     public void onDisable() {
