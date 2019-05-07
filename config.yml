@@ -3,14 +3,14 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.7Snapshot                                                #
+# # Version: 0.8Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
 Messages:
     Prefix: '&8&l[&b&lJoinMessages&8&l] '
     Reload-Complete: '&a&lReload Complete!'
-    MOTD:
+    MOTD: # MOTD WILL CLEAR CHAT ON JOIN! 
         - ''
         - '&aHi! &9{player}'
         - '&bWelcome to Server &9{server}'
@@ -20,7 +20,19 @@ Messages:
     Reloading: '&e&lReloading Plugins....'
     Join-Message: '&e&l{player} &ahas joined the server!'
     Quit-Message: '&e&l{player} &chas leaved the server :('
+    Title-Off: '&eTitle &cfeature has been off'
+    Title-On: '&eTitle &afeature has been on!'
+    MOTD-On: '&eMotd &afeature has been on!' 
+    MOTD-Off: '&eMotd &cfeature has been off!'
+    Unknown-Command: '&cUnknown command! Please type /jm help for show all command'
+    Usage-Title: '&cUsage: /jm title <on/off>'
+    Usage-MOTD: '&cUsage: /jm motd <on/off>'
 Title:
+    Enable: true
     Title: '&6&lWelcome!'
     Subtitle: '&9Hi {player}!'
     Actionbar: '&aHave fun!'
+Settings:
+    Title-Enable: true
+    MOTD-Enable: true
+    Check-Update: true
