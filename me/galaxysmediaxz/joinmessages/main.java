@@ -3,6 +3,7 @@ package me.galaxysmediaxz.joinmessages;
 import java.util.List;
 import net.minecraft.server.v1_8_R1.ChatSerializer;
 import net.minecraft.server.v1_8_R1.EnumTitleAction;
+import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R1.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class main extends JavaPlugin implements Listener {
-    public static String pr,reload;
+    public static String pr,reload,playeronly,reloading;
     public static main plugin;
             
     @Override
@@ -32,6 +33,8 @@ public class main extends JavaPlugin implements Listener {
         getServer().getLogger().info("[JoinMessages] Plugins has been fully started!");
         pr = getConfig().getString("Messages.Prefix").replace("&", "§");
         reload = getConfig().getString("Messages.Reload-Complete").replace("&", "§");
+        playeronly = getConfig().getString("Messages.Player-Only").replace("&", "§");
+        reloading = getConfig().getString("Messages.Reloading").replace("&", "§");
     }
 
     @EventHandler
@@ -46,12 +49,14 @@ public class main extends JavaPlugin implements Listener {
         }
         
         PacketPlayOutTitle title = new PacketPlayOutTitle(EnumTitleAction.TITLE,
-                ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Messages.Title").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"),40,20,20);
+                ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Title.Title").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"),40,20,20);
         PacketPlayOutTitle subtitle = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
-                ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Messages.Subtitle").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"),40,20,20);
+                ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Title.Subtitle").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"),40,20,20);
+        PacketPlayOutChat actionbar = new PacketPlayOutChat(ChatSerializer.a("{\"text\":\"" + this.getConfig().getString("Title.Actionbar").replace("&" , "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()) + "\"}"), (byte) 2);
         
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(subtitle);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(actionbar);
    }
 
     @Override
@@ -73,6 +78,12 @@ public class main extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        
+        if(!(sender instanceof Player)){
+            sender.sendMessage(pr + playeronly);
+            return true;
+        }
+        else{  
         Player p = (Player)sender;
         if(command.getName().equalsIgnoreCase("jm")){
             if(!sender.hasPermission("jm.admin")){
@@ -85,8 +96,12 @@ public class main extends JavaPlugin implements Listener {
             }
             else{
                 if(args[0].equalsIgnoreCase("reload")){
+                    getServer().getLogger().info("[JoinMessages] Reloading Joinmessages...");
+                    sender.sendMessage(pr + reloading);
                     reloadConfig();
                     saveConfig();
+                    setEnabled(false);
+                    setEnabled(true);
                     sender.sendMessage(pr + reload);
                 }
                 if(args[0].equalsIgnoreCase("help")){
@@ -95,7 +110,10 @@ public class main extends JavaPlugin implements Listener {
             }
             }
         }
+        }
         return false;
     }
+    
+    
 }
 
