@@ -5,8 +5,7 @@ Feature:
 Permission
 Command Argument
 Join Motd
-Join Title
-Change a join/left messages
+Join Title/Actionbar
 
 
 Permission:
