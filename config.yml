@@ -3,7 +3,7 @@
 # #                      JoinCommands                                   #
 # #                                                                     #
 # #  Author: GalaxySMediaXz                                             #
-# # Version: 0.8Snapshot                                                #
+# #  Version: 1.1Snapshot                                                #
 # #                                                                     #
 # #######################################################################
 
@@ -15,11 +15,16 @@ Messages:
         - '&aHi! &9{player}'
         - '&bWelcome to Server &9{server}'
         - ''
+    Join-Hologram: '&bWelcome!'
+    Join-Hologram2nd: '&bGo to died!'
     No-Permission: '&cSorry, {player} but you not have permission to use this command'
     Player-Only: '&cOnly Player Can use this command!'
     Reloading: '&e&lReloading Plugins....'
     Join-Message: '&e&l{player} &ahas joined the server!'
     Quit-Message: '&e&l{player} &chas leaved the server :('
+    First-Join-Message: '&dWelcome {player}! You have join this server as first time!'
+    Rank-Join-Message: '&b&l{player} &ahas joined to &7{server}!'
+    Rank-Quit-Message: '&b&l{player} &chas leaved a &7{server}!'
     Title-Off: '&eTitle &cfeature has been off'
     Title-On: '&eTitle &afeature has been on!'
     MOTD-On: '&eMotd &afeature has been on!' 
@@ -32,6 +37,9 @@ Title:
     Title: '&6&lWelcome!'
     Subtitle: '&9Hi {player}!'
     Actionbar: '&aHave fun!'
+    First-Time-Title: '&6&lWelcome!'
+    First-Time-Subtitle: '&bYou have joined this server as first time!'
+    First-Time-Actionbar: '&6ENJOY!'
 Settings:
     Title-Enable: true
     MOTD-Enable: true
