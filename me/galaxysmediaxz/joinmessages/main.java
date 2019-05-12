@@ -1,31 +1,33 @@
 package me.galaxysmediaxz.joinmessages;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
 public class main extends JavaPlugin implements Listener {
-    public static String pr,reload,playeronly,reloading,titleon,titleoff,motdoff,motdon,title,subtitle,actionbar;
+    public static String pr,reload,playeronly,reloading,titleon,titleoff,motdoff,motdon,title,subtitle,actionbar,pholo;
     public static main plugin;
     public String version;
     public String cversion;
+    
+    
 
-   
     @Override
     public void onEnable() {
-        super.onEnable();
         getServer().getLogger().info("This server using" + getServer().getServerId() + "Version" + getServer().getVersion());
         getServer().getLogger().info("[JoinMessages] Checking config...");
         getServer().getLogger().info("[JoinMessages] Trying to register event...");
@@ -51,12 +53,12 @@ try {
         getServer().getLogger().info("[JoinMessages] An update found!");
         getServer().getLogger().info("[JoinMessages] Lastest version is: " + updater.getLatestVersion() + " Download at: " + updater.getResourceUrl());
         }else{
-        // this will print when no updates
         getServer().getLogger().info("[JoinMessages] Your JoinMessages is lastest version!");
         return;
         }
         }catch(Exception e) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not proceed update-checking, Ignoring...");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Could not proceed update-checking, Ignoring... [Please cotact owner with this stacktrace]");
+        e.printStackTrace();
         }
         }
         else{
@@ -68,8 +70,9 @@ try {
     }
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
         
+        Player p = e.getPlayer();
+        p = e.getPlayer();
         title = getConfig().getString("Title.Title").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName());
         subtitle = getConfig().getString("Title.Subtitle").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName());
         actionbar = getConfig().getString("Title.Actionbar").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName());
@@ -84,18 +87,34 @@ try {
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', s).replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
         }
         }
-        e.setJoinMessage(getConfig().getString("Messages.Join-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+         
     }
-      
 
     @EventHandler
     public void OnPlayerQuit(PlayerQuitEvent e){
         
         Player p = e.getPlayer();
-        
-        e.setQuitMessage(getConfig().getString("Messages.Quit-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+        if(p.hasPermission("jm.rank")){
+        e.setQuitMessage(getConfig().getString("Messages.Rank-Quit-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
     }
-
+        else{
+            e.setQuitMessage(getConfig().getString("Messages.Quit-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+        }
+    }
+    @EventHandler
+    public void JoinMSG(PlayerJoinEvent e){
+        Player p = e.getPlayer();
+        if(!e.getPlayer().hasPlayedBefore()){
+            getServer().broadcastMessage(getConfig().getString("Messages.First-Join-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+        }     
+        if(p.hasPermission("jm.rank")){
+                  e.setJoinMessage(getConfig().getString("Messages.Rank-Join-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+                  
+    }
+        else{
+e.setJoinMessage(getConfig().getString("Messages.Join-Message").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()));
+    }
+    }
     @Override
     public void onDisable() {
         getServer().getLogger().info("[JoinMessages] Stopping a plugins..");
@@ -208,6 +227,7 @@ try {
 	@EventHandler
 	public void onJoinTitle(PlayerJoinEvent e) {
             Player p = e.getPlayer();
+            if(p.hasPlayedBefore()){
         if(getConfig().getBoolean("Settings.Title-Enable")){
 			try {
 				Object enumTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null);
@@ -226,13 +246,39 @@ try {
                                 getLogger().warning("Your server version is " + getServer().getBukkitVersion());
                                 getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages");
                                 setEnabled(false);
+                                getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
 			}
-		}
-
         }
+		}
+            else{
+        if(getConfig().getBoolean("Settings.Title-Enable")){
+			try {
+				Object enumTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null);
+				Object chat = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + this.getConfig().getString("Title.First-Time-Title").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()).replace("%newline%", "\n") +"\"}");
+				
+				Constructor<?> titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+				Object packet = titleConstructor.newInstance(enumTitle, chat, 20, 40, 20);
+				
+				sendPacket(e.getPlayer(), packet);
+
+			}
+			
+			catch (Exception e2) {
+				getLogger().severe("Opps! Packet can't be send to player!");
+                                getLogger().severe("It seem plugin is not support your server version!");
+                                getLogger().warning("Your server version is " + getServer().getBukkitVersion());
+                                getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages");
+                                setEnabled(false);
+                                getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
+			}
+        }
+		}
+        }
+
 	@EventHandler
 	public void onJoinSub(PlayerJoinEvent e) {
             Player p = e.getPlayer();
+            if(p.hasPlayedBefore()){
         if(getConfig().getBoolean("Settings.Title-Enable")){
 			try {
 				Object enumTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null);
@@ -251,10 +297,36 @@ try {
                                 getLogger().warning("Your server version is " + getServer().getBukkitVersion());
                                 getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages");
                                 setEnabled(false);
+                                getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
 			}
-		}
-
         }
+		}
+            else{
+                        if(getConfig().getBoolean("Settings.Title-Enable")){
+			try {
+				Object enumTitle = getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null);
+				Object chat = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + this.getConfig().getString("Title.First-Time-Subtitle").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()).replace("%newline%", "\n") +"\"}");
+				
+				Constructor<?> titleConstructor = getNMSClass("PacketPlayOutTitle").getConstructor(getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], getNMSClass("IChatBaseComponent"), int.class, int.class, int.class);
+				Object packet = titleConstructor.newInstance(enumTitle, chat, 20, 40, 20);
+				
+				sendPacket(e.getPlayer(), packet);
+
+			}
+			
+			catch (Exception e1) {
+				getLogger().severe("Opps! Packet can't be send to player!");
+                                getLogger().severe("It seem plugin is not support your server version!");
+                                getLogger().warning("Your server version is " + getServer().getBukkitVersion());
+                                getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages");
+                                setEnabled(false);
+                                getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
+			}
+        }
+		}
+            }
+
+        
 	@EventHandler
 	public void onJoinAction(PlayerJoinEvent e) {
             Player p = e.getPlayer();
@@ -269,9 +341,35 @@ try {
 
             playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
         } catch (Exception e3) {
-              e3.printStackTrace();
+              getLogger().severe("Opps! Actionbar Packet can't be send to player!");
+              getLogger().severe("It seem about plugin coding is error or your server version is not support!");
+              getLogger().warning("Your server version is " + getServer().getBukkitVersion());
+              getLogger().warning("Sadly but we need to disable plugins! Please contact Author for help! or trying to changing server version to continue using JoinMessages");
+              setEnabled(false);
+              getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
         }
     }
+        else{
+        if(getConfig().getBoolean("Settings.Title-Enable")){
+        try {
+            Constructor<?> constructor = getNMSClass("PacketPlayOutChat").getConstructor(getNMSClass("IChatBaseComponent"), byte.class);
+              
+            Object icbc = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + this.getConfig().getString("Title.First-Time-Actionbar").replace("&", "§").replace("{player}", p.getName()).replace("{server}", getServer().getServerName()).replace("%newline%", "\n") + "\"}");
+            Object packet = constructor.newInstance(icbc, (byte) 2);
+            Object entityPlayer= p.getClass().getMethod("getHandle").invoke(p);
+            Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+
+            playerConnection.getClass().getMethod("sendPacket", getNMSClass("Packet")).invoke(playerConnection, packet);
+        } catch (Exception e3) {
+              getLogger().severe("Opps! Actionbar Packet can't be send to player!");
+              getLogger().severe("It seem about plugin coding is error or your server version is not support!");
+              getLogger().warning("Your server version is " + getServer().getBukkitVersion());
+              getLogger().warning("Sadly but we need to disable plugins! Please contact Author for help! or trying to changing server version to continue using JoinMessages");
+              setEnabled(false);
+              getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
+        }
+    }
+        }
         }
 
 	public void sendPacket(Player player, Object packet) {
@@ -285,8 +383,9 @@ try {
 				getLogger().severe("Opps! Packet can't be send to player!");
                                 getLogger().severe("It seem plugin is not support your server version!");
                                 getLogger().warning("Your server version is " + getServer().getBukkitVersion());
-                                getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages");
+                                getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages here");
                                 setEnabled(false);
+                                getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
 		}
 	}
 	
@@ -303,6 +402,7 @@ try {
                                 getLogger().warning("Your server version is " + getServer().getBukkitVersion());
                                     getLogger().warning("Sadly but we need to disable plugins! Please change server version to continue using JoinMessages");
                                 setEnabled(false);
+                                getLogger().warning("JoinMessages was disabled! Enabled it again by Reload Server!");
 			return null;
 		}
 	}
